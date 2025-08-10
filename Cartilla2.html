@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amenazas Geológicas - Geo-kaapiya'jni</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #4e1b00 0%, #b48911 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: black;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+     .hero {
+        position: relative;
+        background-image: url('Portada.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        color: white;
+        padding: 50px;
+        text-align: center;
+        z-index: 1;
+    }
+
+    .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.4); /* capa oscura */
+        z-index: -1;
+    }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .subtitle {
+            font-size: 1.4em;
+            font-style: italic;
+            margin-bottom: 20px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .quote {
+            font-size: 1.1em;
+            font-style: italic;
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #d7c3a1;
+            border-radius: 10px;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding: 30px;
+            background: #d7c3a1;
+            border-radius: 15px;
+            border-left: 5px solid #733700;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #C8AD7F, #d3d3d3);
+            border-radius: 2px;
+        }
+
+        .section h3 {
+            color: #000000;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+            padding: 10px 15px;
+            background: linear-gradient(135deg, #C8AD7F, #d3d3d3);
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 2px dashed #bdc3c7;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            font-style: italic;
+            color: #7f8c8d;
+            transition: all 0.3s ease;
+        }
+
+        .image-placeholder:hover {
+            border-color: #3498db;
+            background: linear-gradient(135deg, #C8AD7F, #000000);
+        }
+
+        .viewer-placeholder {
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+            color: white;
+            font-size: 1.2em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .viewer-placeholder::before {
+            content: '🗺️';
+            font-size: 4em;
+            margin-bottom: 15px;
+            opacity: 0.7;
+        }
+
+        .alert-levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .alert-card {
+            padding: 20px;
+            border-radius: 12px;
+            color: white;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .alert-card:hover {
+            transform: scale(1.05);
+        }
+
+        .alert-verde { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+        .alert-amarilla { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .alert-naranja { background: linear-gradient(135deg, #e67e22, #d35400); }
+        .alert-roja { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+
+        .recommendations {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 5px solid #2ecc71;
+        }
+
+        .recommendations h4 {
+            color: #27ae60;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .recommendations ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .recommendations li {
+            margin: 10px 0;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border-left: 3px solid #2ecc71;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .recommendations li::before {
+            content: '✓';
+            color: #27ae60;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .causes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .cause-item {
+            padding: 15px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 500;
+            transition: transform 0.3s ease;
+        }
+
+        .cause-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .authors {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .author {
+            padding: 15px 25px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5em; }
+            .hero .subtitle { font-size: 1.2em; }
+            .nav { flex-direction: column; align-items: center; }
+            .section { padding: 20px; }
+            .viewer-placeholder { height: 300px; }
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: none;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1>AMENAZAS GEOLÓGICAS</h1>
+            <p class="subtitle">Geo-kaapiya'jni</p>
+            <div class="quote">
+                "ENTENDER Y CONOCER NUESTRA RELACIÓN CON AQUELLO QUE NOS RODEA A TRAVÉS DE LA EDUCACIÓN, NOS PERMITIRÁ ACERCARNOS A LA GRAN BÚSQUEDA DE EQUILIBRIO DEL SAGRADO VÍNCULO QUE TODOS POSEEMOS CON LA HERMOSA NATURALEZA."
+            </div>
+            <p><strong>PARA CAMBIAR Y CONSTRUIR UNA SOCIEDAD CADA VEZ MEJOR, LA EDUCACIÓN ES EL CAMINO</strong></p>
+            <div class="authors">
+                <div class="author">Morales, Carlos</div>
+                <div class="author">Santos, Dana</div>
+                <div class="author">Yule, Dilan</div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="nav">
+            <a href="#geologia" class="nav-item">Geología</a>
+            <a href="#amenazas" class="nav-item">Amenazas Geológicas</a>
+            <a href="#sismos" class="nav-item">Sismos</a>
+            <a href="#vulcanismo" class="nav-item">Vulcanismo</a>
+            <a href="#movimientos" class="nav-item">Movimientos en Masa</a>
+            <a href="#avenidas" class="nav-item">Avenidas Torrenciales</a>
+            <a href="#inundaciones" class="nav-item">Inundaciones</a>
+            <a href="#geoeducacion" class="nav-item">Geoeducación</a>
+        </nav>
+
+        <!-- Sección: Geología -->
+        <section id="geologia" class="section">
+            <h2>Geología</h2>
+            <p>La geología es la ciencia que estudia la composición, estructura e historia de la Tierra, incluyendo sus recursos naturales (minerales, agua, energía, etc.) Su objetivo es comprender los procesos que han modelado nuestro planeta desde la superficie hasta el interior, a lo largo del tiempo geológico, desde su formación hasta la actualidad.</p>
+             
+<div style="text-align: center; margin: 20px 0;">
+    <img src="Geologia.png" 
+         alt="Relieve terrestre" 
+         style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+    <p style="font-style: italic; color: #7f8c8d; margin-top: 10px;">
+
+    </p>
+</div>
+
+            <p>Su nombre proviene del griego "geo" (Tierra) y "logos" (estudio). Por lo tanto, etimológicamente, geología significa "el estudio de la Tierra".</p>
+
+            <h3>¿Qué estudia la geología?</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0;">
+                <div style="padding: 20px; background: linear-gradient(135deg, #e8f5e8, #d4e6f1); border-radius: 10px;">
+                    <h4>Composición y estructura</h4>
+                    <p>Examina los materiales que constituyen la Tierra, incluyendo minerales, rocas y fósiles.</p>
+                </div>
+                <div style="padding: 20px; background: linear-gradient(135deg, #fef9e7, #fadbd8); border-radius: 10px;">
+                    <h4>Procesos geológicos</h4>
+                    <p>Estudia la tectónica de placas, el vulcanismo, la erosión y la sedimentación.</p>
+                </div>
+                <div style="padding: 20px; background: linear-gradient(135deg, #e8f6f3, #d5f3df); border-radius: 10px;">
+                    <h4>Historia geológica</h4>
+                    <p>Reconstruye la evolución de la Tierra a través del tiempo geológico.</p>
+                </div>
+                <div style="padding: 20px; background: linear-gradient(135deg, #fdf2e9, #f4ecf7); border-radius: 10px;">
+                    <h4>Recursos naturales</h4>
+                    <p>Investiga la localización y gestión sostenible de recursos minerales y energéticos.</p>
+                </div>
+            </div>
+
+            <div style="width: 100%; height: 500px; margin: 30px 0; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+
+    <iframe src="Mapas/Modelo_Geo/index.html" 
+            width="100%" 
+            height="100%" 
+            frameborder="0" 
+            style="border-radius: 15px;">
+    </iframe>
+</div>
+        </section>
+
+        <!-- Sección: Amenazas Geológicas -->
+        <section id="amenazas" class="section">
+            <h2>¿Qué son las amenazas geológicas?</h2>
+            <p>Son procesos o fenómenos naturales que tienen el potencial de provocar pérdidas humanas, daños materiales, interrupciones en la vida social y económica, o afectaciones al medio ambiente.</p>
+
+            <h3>Tipos de amenazas presentes en nuestro territorio</h3>
+            <div class="causes-grid">
+                <div class="cause-item">Sismos</div>
+                <div class="cause-item">Actividad volcánica</div>
+                <div class="cause-item">Movimientos en masa</div>
+                <div class="cause-item">Avenidas torrenciales</div>
+                <div class="cause-item">Inundaciones</div>
+            </div>
+
+            <h3>¿Por qué es importante conocerlos?</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0;">
+                <div style="padding: 25px; background: linear-gradient(135deg, #e8f5e8, #d4f1d4); border-radius: 12px; border-left: 5px solid #27ae60;">
+                    <h4>1. Reducción de la vulnerabilidad y el riesgo</h4>
+                    <p>Al comprender estos fenómenos, podemos identificar zonas de mayor riesgo y tomar medidas preventivas.</p>
+                </div>
+                <div style="padding: 25px; background: linear-gradient(135deg, #fef9e7, #f9e79f); border-radius: 12px; border-left: 5px solid #f39c12;">
+                    <h4>2. Mitigación de los impactos</h4>
+                    <p>Implementar medidas preventivas que disminuyan los efectos de los desastres, protegiendo vidas y bienes.</p>
+                </div>
+                <div style="padding: 25px; background: linear-gradient(135deg, #e8f6f3, #a9dfbf); border-radius: 12px; border-left: 5px solid #16a085;">
+                    <h4>3. Promoción del desarrollo sostenible</h4>
+                    <p>Crear un entorno más seguro para el desarrollo económico, social y ambiental de las comunidades.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección: Sismos -->
+        <section id="sismos" class="section">
+            <h2>Sismos (Ehd)</h2>
+            <p>Un sismo, también conocido como terremoto, temblor o seísmo, es el movimiento brusco de la Tierra causado por la liberación repentina de energía acumulada en el interior del planeta.</p>
+
+            <div style="text-align: center; margin: 20px 0;">
+    <img src="Sismos.png" 
+         alt="Relieve terrestre" 
+         style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+    <p style="font-style: italic; color: #7f8c8d; margin-top: 10px;">
+
+    </p>
+</div>
+
+            <h3>Se pueden producir por:</h3>
+            <div class="causes-grid">
+                <div class="cause-item">Erupción de un volcán</div>
+                <div class="cause-item">Deslizamiento súbito en una falla</div>
+                <div class="cause-item">Movimiento de magma</div>
+                <div class="cause-item">Deslizamientos de gran magnitud</div>
+                <div class="cause-item">Impacto de un meteorito</div>
+            </div>
+
+            <p><strong>Intensidad:</strong> La intensidad de un sismo se refiere al nivel de sacudida que se percibe en la superficie terrestre y el daño que puede causar. Dependiendo de su fuerza, puede provocar desde leves vibraciones hasta el colapso de edificaciones.</p>
+
+           <div style="width: 100%; height: 500px; margin: 30px 0; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+
+    <iframe src="Mapas/Sismica/index.html" 
+            width="100%" 
+            height="100%" 
+            frameborder="0" 
+            style="border-radius: 15px;">
+    </iframe>
+            </div>
+        </section>
+
+        <!-- Sección: Vulcanismo -->
+        <section id="vulcanismo" class="section">
+            <h2>Vulcanismo (Nxadx)</h2>
+            <p>Es un proceso fundamental en la dinámica de nuestro planeta. Se trata de la manifestación en superficie del calor interno de la Tierra. Este calor provoca el derretimiento de las rocas del manto terrestre, generando magma que asciende hacia la superficie.</p>
+
+              <div style="text-align: center; margin: 20px 0;">
+    <img src="Volcan.png" 
+         alt="Relieve terrestre" 
+         style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+    <p style="font-style: italic; color: #7f8c8d; margin-top: 10px;">
+Volcán Nevado del Huila (SGC) - Es el más cercano a nuestro territorio, llamado îisx tuhme o "anciano canoso" en la comunidad nasa. 
+    </p>
+</div>
+
+            <h3>Niveles de Alerta Volcánica</h3>
+            <div class="alert-levels">
+                <div class="alert-card alert-verde">
+                    <h4>NIVEL VERDE</h4>
+                    <h5>VIGILANCIA</h5>
+                    <p>El volcán está activo y su comportamiento es estable. Peligro mínimo para las poblaciones.</p>
+                    <strong>Acción:</strong> Colaborar en planes de evacuación y identificar zonas seguras.
+                </div>
+                
+                <div class="alert-card alert-amarilla">
+                    <h4>NIVEL AMARILLO</h4>
+                    <h5>PREPARACIÓN</h5>
+                    <p>El volcán presenta cambios en su comportamiento. Peligro bajo o moderado.</p>
+                    <strong>Acción:</strong> Participar en simulacros y verificar planes de evacuación.
+                </div>
+                
+                <div class="alert-card alert-naranja">
+                    <h4>NIVEL NARANJA</h4>
+                    <h5>ALISTAMIENTO</h5>
+                    <p>El volcán puede hacer erupción en días o semanas. Peligro moderado.</p>
+                    <strong>Acción:</strong> Prepararse para evacuar y tener listos los maletines de emergencia.
+                </div>
+                
+                <div class="alert-card alert-roja">
+                    <h4>NIVEL ROJO</h4>
+                    <h5>EVACUACIÓN</h5>
+                    <p>El volcán ha hecho erupción o está en proceso. Peligro alto.</p>
+                    <strong>Acción:</strong> Evacuar de manera calmada y organizada hacia zonas seguras.
+                </div>
+            </div>
+
+<div style="width: 100%; height: 500px; margin: 30px 0; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+
+    <iframe src="Mapas/Modelo_Volcanica/index.html" 
+            width="100%" 
+            height="100%" 
+            frameborder="0" 
+            style="border-radius: 15px;">
+    </iframe>
+            </div>
+        </section>
+
+        <!-- Sección: Movimientos en Masa -->
+        <section id="movimientos" class="section">
+            <h2>Movimientos en masa (Ejx)</h2>
+            <p>Los movimientos en masa se refieren a un rápido movimiento ladera abajo de rocas o suelo en forma de una masa más o menos coherente.</p>
+
+             <div style="text-align: center; margin: 20px 0;">
+    <img src="MM.png" 
+         alt="Relieve terrestre" 
+         style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+    <p style="font-style: italic; color: #7f8c8d; margin-top: 10px;">
+    </p>
+</div>
+
+            <h3>Factores que pueden producir un movimiento en masa</h3>
+            <div class="causes-grid">
+                <div class="cause-item">Lluvias intensas</div>
+                <div class="cause-item">Deforestación</div>
+                <div class="cause-item">Excavaciones inadecuadas</div>
+                <div class="cause-item">Actividad sísmica</div>
+                <div class="cause-item">Sobrecarga del terreno</div>
+                <div class="cause-item">Erosión</div>
+            </div>
+
+            <div class="recommendations">
+                <h4>Recomendaciones de prevención y manejo:</h4>
+                <ul>
+                    <li>Realizar las rutas de evacuación en caso de un movimiento en masa</li>
+                    <li>Realizar un control y manejo estricto del agua</li>
+                    <li>Evitar excavar la base de laderas empinadas</li>
+                    <li>Evitar usar explosivos en terrenos propensos a deslizamientos</li>
+                </ul>
+            </div>
+
+             <div style="width: 100%; height: 500px; margin: 30px 0; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+
+    <iframe src="Mapas/Modelo_MM/index.html" 
+            width="100%" 
+            height="100%" 
+            frameborder="0" 
+            style="border-radius: 15px;">
+    </iframe>
+            </div>
+
+        </section>
+
+        <!-- Sección: Avenidas Torrenciales -->
+        <section id="avenidas" class="section">
+            <h2>Avenidas Torrenciales (Yu' kaah)</h2>
+            <p>Las avenidas torrenciales se describen como una mezcla de agua y sedimentos en diferentes proporciones, que se desplaza rápidamente a lo largo de cauces en cuencas pequeñas y de montaña, generando tiempos de respuesta muy cortos.</p>
+
+            <div style="text-align: center; margin: 20px 0;">
+    <img src="Avenida.png" 
+         alt="Relieve terrestre" 
+         style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+    <p style="font-style: italic; color: #7f8c8d; margin-top: 10px;">
+    </p>
+</div>
+
+            <h3>Factores que pueden producir una avenida torrencial</h3>
+            <div class="causes-grid">
+                <div class="cause-item">Lluvias intensas</div>
+                <div class="cause-item">Topografía empinada</div>
+                <div class="cause-item">Deforestación</div>
+                <div class="cause-item">Obstrucción de cauces</div>
+                <div class="cause-item">Erosión de cuencas</div>
+            </div>
+
+            <div class="recommendations">
+                <h4>Recomendaciones de prevención y manejo:</h4>
+                <ul>
+                    <li>No edifiques casas en áreas propensas a avenidas torrenciales</li>
+                    <li>Mantén libres de escombros los cauces de ríos y quebradas</li>
+                    <li>Evita la construcción en valles estrechos o pendientes empinadas</li>
+                    <li>Conserva la vegetación en las cuencas hidrográficas</li>
+                </ul>
+           
+        </section>
+
+        <!-- Sección: Inundaciones -->
+        <section id="inundaciones" class="section">
+            <h2>Inundaciones (ĩkha'ha)</h2>
+            <p>Una inundación es un desbordamiento de agua que cubre normalmente terrenos secos. Este fenómeno puede ser causado por diversas razones, siendo las más comunes las lluvias intensas y la subida del nivel de ríos debido a tormentas.</p>
+
+             <div style="text-align: center; margin: 20px 0;">
+    <img src="Inundacion.png" 
+         alt="Relieve terrestre" 
+         style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+    <p style="font-style: italic; color: #7f8c8d; margin-top: 10px;">
+</div>
+
+            <h3>Factores y principales causas</h3>
+            <div class="causes-grid">
+                <div class="cause-item">Lluvias intensas prolongadas</div>
+                <div class="cause-item">Desbordamiento de ríos</div>
+                <div class="cause-item">Falla de infraestructura</div>
+                <div class="cause-item">Mareas altas</div>
+                <div class="cause-item">Urbanización inadecuada</div>
+                <div class="cause-item">Deforestación</div>
+            </div>
+
+            <div class="recommendations">
+                <h4>Recomendaciones de prevención y manejo:</h4>
+                <ul>
+                    <li>Evitar la construcción en zonas de riesgo de inundación</li>
+                    <li>Fomentar la participación comunitaria en programas de reducción del riesgo</li>
+                    <li>Restaurar y proteger los humedales y áreas naturales</li>
+                    <li>Escuchar las noticias y alertas meteorológicas</li>
+                </ul>
+            </div>
+
+            <div style="width: 100%; height: 500px; margin: 30px 0; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+
+    <iframe src="Mapas/Modelo_Inundacion/index.html" 
+            width="100%" 
+            height="100%" 
+            frameborder="0" 
+            style="border-radius: 15px;">
+    </iframe>
+            </div>
+        </section>
+
+        <!-- Sección: Geoeducación -->
+        <section id="geoeducacion" class="section">
+            <h2>¿Por qué es importante la geoeducación?</h2>
+            <p>Al estudiar la historia y cómo ha evolucionado la vida y el planeta, descubriremos que conocer y entender nuestro entorno es fundamental para el progreso y la preservación de la naturaleza.</p>
+            
+            <p>Todos hacemos parte de este fascinante planeta, y a través de las valiosas enseñanzas que nos dejan las ciencias de la tierra, podemos trazarnos como objetivo comprender todo aquello que nos rodea.</p>
+
+</div>
+
+             <div style="text-align: center; margin: 20px 0;">
+    <img src="Juntos.jepg" 
+         alt="Relieve terrestre" 
+         style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+    <p style="font-style: italic; color: #7f8c8d; margin-top: 10px;">
+</div>
+
+            
+            <div style="background: linear-gradient(135deg, #
